@@ -89,7 +89,7 @@ export const newDonation = async(req: Request,res: Response): Promise<void> =>{
 
         //validação do type de equipamentos
 
-        if(devices.item !== DEVICE && devices.state !== STATEDEVICE){
+        if(devices.item !== DEVICE || devices.state !== STATEDEVICE){
             throw new Error(erros.WRONG_TYPES.message)
         }
 
