@@ -1,16 +1,14 @@
-import { DEVICE, STATEDEVICE } from "./devices"
-
-export type user = {
+export type institution = {
+    id: string
     name: string
     email: string
     phone: string
     zip: string
     city: string
     state: string
-    streetAddress: string
+    street_address: string
     number: string
     complement: string
     neighborhood: string
-    deviceCount: number
-    devices: Array<[DEVICE|STATEDEVICE]>
+    device_count: number
 }

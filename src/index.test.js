@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('./index');
+import { erros } from "./types/erros"
 
 describe('Test', () => {
 
@@ -28,7 +29,8 @@ describe('Test', () => {
     const response = await request(app).post('/donation')
     .send(body)
 		expect(response.status).toEqual(400);
-    expect(response.text).toMatch("Todos os campos obrigatórios devem ser informados");                                                                 
+    expect(response.body).toStrictEqual(erros.MISSING_PARAMETERS); 
+    console.log(response)                                                              
   });
 
   it('Teste de email inválido na rota Donations', async () => {
@@ -45,15 +47,15 @@ describe('Test', () => {
       neighborhood: "xxx", 
       deviceCount: 1, 
       devices: [{
-        "item": "NOTEBOOK",
-        "state": "WORKING"
+        "type": "NOTEBOOK",
+        "condition": "WORKING"
       }]
     }
 
     const response = await request(app).post('/donation')
     .send(body)
 		expect(response.status).toEqual(400);
-    expect(response.text).toMatch("Email informado está em formato inválido.");                                                                 
+    expect(response.body).toStrictEqual(erros.INVALID_EMAIL);                                                                 
   });
 
   it('Teste de device não preenchido na rota Donation', async () => {
@@ -75,7 +77,7 @@ describe('Test', () => {
     const response = await request(app).post('/donation')
     .send(body)
 		expect(response.status).toEqual(400);
-    expect(response.text).toMatch("Todos os campos obrigatórios devem ser informados");                                                                 
+    expect(response.body).toStrictEqual(erros.MISSING_PARAMETERS);                                                                
   });
 
   it('Teste de erro na quantidade de equipamentos na rota Donations', async () => {
@@ -92,15 +94,15 @@ describe('Test', () => {
       neighborhood: "xxx", 
       deviceCount: 3, 
       devices: [{
-        "item": "NOTEBOOK",
-        "state": "WORKING"
+        "type": "NOTEBOOK",
+        "condition": "WORKING"
       }]
     }
 
     const response = await request(app).post('/donation')
     .send(body)
 		expect(response.status).toEqual(400);
-    expect(response.text).toMatch("A quantidade de equipamentos ({$deviceCount}) não está de acordo com as informações de equipamentos enviados ({$sentDevices}).");                                                                 
+    expect(response.body).toStrictEqual(erros.WRONG_AMOUNT);                                                             
   });
 
   it('Teste de type inválido na rota Donations', async () => {
@@ -117,15 +119,15 @@ describe('Test', () => {
       neighborhood: "xxx", 
       deviceCount: 1, 
       devices: [{
-        "item": "NOTEXIST",
-        "state": "NOTEXIST"
+        "type": "NOTEXIST",
+        "condition": "NOTEXIST"
       }]
     }
 
     const response = await request(app).post('/donation')
     .send(body)
 		expect(response.status).toEqual(400);
-    expect(response.text).toMatch("O tipo informado de equipamentos ({$devices}) não é suportado; verificar documentação.");                                                                  
+    expect(response.body).toStrictEqual(erros.WRONG_TYPES);                                                                 
   });
   
   it('Teste de envio correto na rota Donations', async () => {
@@ -142,15 +144,15 @@ describe('Test', () => {
       neighborhood: "xxx", 
       deviceCount: 1, 
       devices: [{
-        "item": "NOTEBOOK",
-        "state": "WORKING"
+        "type": "NOTEBOOK",
+        "condition": "WORKING"
       }]
     }
 
     const response = await request(app).post('/donation')
     .send(body)
 		expect(response.status).toEqual(200);
-    expect(response.body).toEqual({success:true});                                                                 
+    expect(response.body).toStrictEqual({success:true});                                                                 
   });
 
 });
